@@ -22,7 +22,7 @@ section:nth-of-type(n+2) .left h2{font-size:1.5rem;margin:15px 0 2px 0;color:#cc
 #cover .left a:hover{color:#7fcada}#cover .right{width:100%}#cover .right .wrapper{padding:120px 0 0 0}
 #cover .right .greetings{color:white;font-size:1.1rem;margin-bottom:15px;letter-spacing:1px}
 #cover .right .name,#cover .right .surname{color:#7fcada;font-size:2.5rem;line-height:120%}
-#cover .right .name{font-weight:bolder;letter-spacing:4px}#cover .right .surname{font-weight:0;letter-spacing:-1px}
+#cover .right .name{font-weight:bolder;letter-spacing:4px}#cover .right .surname{letter-spacing:-1px}
 #cover .right .subtitle{color:#ccc;font-size:1.3rem;margin-top:10px}#cover .right .personal-info{color:white;padding:20px 0 20px 0;width:100%;margin-top:70px;border-top:1px solid #ccc}
 #cover .right .personal-info ul{margin:0;padding:0;list-style:none}#cover .right .personal-info ul li{font-size:.9rem;-webkit-transition-duration:.8s;transition-duration:.8s}
 #cover .right .personal-info ul li i{font-size:.8rem;margin-right:5px}#cover .right .personal-info ul li:not(:last-child){margin-bottom:20px}
