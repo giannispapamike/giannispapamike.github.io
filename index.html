@@ -1,12 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Giannis Papamichail Portfolio</title>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Pacifico|Poppins|Satisfy">
+
+    <!-- Font Awesome 5 -->
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <!-- Humbergers Css -->
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/hamburgers.min.css">
+
+    <!-- Normalize Css -->
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/normalize.min.css">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/main.min.css">
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/animations.min.css">
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/responsive.min.css">
+
+    <!-- Tab Icon -->
+    <link rel="shortcut icon" href="dist/assets/img/favicon.ico">
+
+    <!-- Tab Title -->
+    <title>John Papas</title>
 </head>
-<body>
-    <h1>John Papas</h1>
+
+<body id="top">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <svg viewBox="0 0 80 80">
+                <circle id="test" cx="40" cy="40" r="32"></circle>
+            </svg>
+        </div>
+
+        <div class="loader triangle">
+            <svg viewBox="0 0 86 80">
+                <polygon points="43 8 79 72 7 72"></polygon>
+            </svg>
+        </div>
+
+        <div class="loader">
+            <svg viewBox="0 0 80 80">
+                <rect x="8" y="8" width="64" height="64"></rect>
+            </svg>
+        </div>
+    </div>
+
+    <div id="main-body">
+        <!-- Navbar -->
+        <div class="navbar" id="navbar">
+            <div class="logo">
+                <a href="#top">Papamichail</a>
+            </div>
+            <div class="menu">
+                <button onclick="toggleNav()" id="hamburgerIcon" class="hamburger hamburger--slider" type="button">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <!-- Sidenav -->
+            <div id="sidenav" class="sidenav">
+                <a href="#about">ABOUT</a>
+                <a href="#education">EDUCATION</a>
+                <a href="#skills">SKILLS</a>
+                <a href="#projects">PROJECTS</a>
+                <a href="#workshops">WORKSHOPS</a>
+                <a href="#interests">INTERESTS</a>
+                <button><a class="buttonlink" href="dist/assets/img/person.png" download="CVenglish.pdf">Download CV EN</a></button>
+                <button><a class="buttonlink" href="dist/assets/img/person.png" download="CVgreek.pdf">Download CV GR</a></button>
+            </div>
+        </div>
+
+        <!-- Cover Section -->
+        <section id="cover">
+            <div class="left">
+                <div class="wrapper">
+                    <img src="/dist/assets/img/johnpapas.jpg">
+                    <div class="social">
+                        <ul>
+                            <li><a href="https://www.facebook.com/papamichail.giannis" target="_blank">
+                                    <i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="https://github.com/giannispapamike" target="_blank">
+                                    <i class="fab fa-github"></i></a></li>
+                            <li><a href="https://join.skype.com/invite/hOkwFMiv6fET" target="_blank">
+                                    <i class="fab fa-skype"></i></a></li>
+                            <li><a href="https://www.linkedin.com/in/giannispapamike/" target="_blank">
+                                    <i class="fab fa-linkedin-in"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <!-- <div></div> -->
+                <div class="wrapper">
+                    <div></div>
+                    <div class="headers">
+                        <div class="greetings">HELLO, I AM</div>
+                        <div class="name">GIANNIS</div>
+                        <div class="surname">PAPAMICHAIL</div>
+                        <div class="subtitle" id="subtitle" data-period="2000"
+                            data-type='[ "Computer Scientist.", "Software Engineer.", "I Love Solving Problems.", "I Love Development." ]'>
+                            <span class="wrap"></span>
+                        </div>
+                    </div>
+                    <div class="personal-info">
+                        <ul>
+                            <li><i class="fas fa-birthday-cake"></i> 23-06-1993</li>
+                            <li><i class="fa fa-map-marker-alt"></i> Athens, Greece</li>
+                            <li><a href="mailto: papamichail.giannis@gmail.com"><i class="fas fa-envelope"></i>
+                                papamichail.giannis@gmail.com</a></li>
+                            <li><i class="fas fa-phone"></i> (+30) 698-772-2979</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="left">
+                <div class="wrapper">
+                    <div class="reference">
+                        <h2>ABOUT</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="wrapper">
+                    <p>Creative and solution-oriented Computer Engineer with in-depth knowledge of algorithmic complexity and data structures.
+                        Open minded. Driven and self-motivated, while enjoying teamwork and collaboration. 
+                        Strong engineering professional graduated from school of Electrical and Computer Engineering at National Technical University of Athens.
+                    </p>
+                    <p>Passionate about new technologies and experimentation.
+                        Skilled in Mathematics, Software development, Web development and Algorithm design.
+                        Experienced in Data Analysis, Natural Language Processing and Machine Learning.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Education Section -->
+        <section id="education" class="education">
+            <div class="left">
+                <div class="wrapper">
+                    <div class="reference">
+                        <h2>EDUCATION</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="wrapper">
+
+                    <div class="date">Feb, 2019</div>
+                    <div class="institution">
+                        <h3>SCHOOL OF ELECTRICAL AND COMPUTER ENGINEERING</h3>
+                        <h4><i>National Technical University of Athens</i></h4>
+                        <h4>Concentration fields:</h4>
+                        <h5> Computer Software, Computer Systems, Telecommunication Systems and
+                            Computer Networks</h5>
+                        <h4>Diploma-thesis:</h4>
+                        <h5>Social Media based Event Detection system, using Natural Language Processing techniques and Machine Learning</h5>
+                    </div>
+                    <div class="date">Jun, 2011</div>
+                    <div class="institution">
+                        <h3>HIGH SCHOOL</h3>
+                        <h4><i>52<sup>nd</sup> Athens High School</i></h4>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="split">
+            <div class="left">
+                <div class="wrapper">
+                    <div class="reference">
+                        <h2>SKILLS</h2>
+                        <h3>What I love to do</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="wrapper">
+
+                    <div class="title">Programming Languages</div>
+
+                    <div class="skills">
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">C</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">C++</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">C#</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">Python</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">Java</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">Assembly</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="title">Web Development</div>
+
+                    <div class="skills">
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">Javascript</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">Typescript</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">NodeJS</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">ASP.NET</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">HTML5, CSS3</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">CSS Frameworks</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">LESS, SASS</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">Angular2</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">SQL Databases</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-set">
+                                <div class="item-title">NoSQL Databases</div>
+                                <div class="percentage"></div>
+                            </div>
+                            <div class="bar">
+                                <span class="skill-level"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="left">
+                <div class="wrapper">
+                    <div class="reference">
+                        <h2>PROJECTS</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="wrapper">
+                    <div class="projects">
+                        <div class="course">
+                            <i class="fas fa-microchip"></i>
+                            <span class="title">Computer Operating Systems</span>
+                            <span class="project">Process Management and Interprocess Communication</span>
+                            <span class="project">POSIX Threads Synchronization Mechanisms</span>
+                            <span class="project">Process Scheduling</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-microchip"></i>
+                            <span class="title">Computer Operating Systems Lab</span>
+                            <span class="project">Wireless network sensor driver for linux operating system</span>
+                            <span class="project">Encryption device for QEMU-KVM</span>
+                            <span class="project">Encrypted Chat interface over TCP/IP</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-gamepad"></i>
+                            <span class="title">Computer Grahics</span>
+                            <span class="project">2D Pong Video Game</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-code"></i>
+                            <span class="title">Software Engineering</span>
+                            <span class="project">VoIP Application</span>
+                            <span class="project">Modern Web Application (using NodeJS, Elastic Search &
+                                Angular2)</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-robot"></i>
+                            <span class="title">Artificial Intelligence</span>
+                            <span class="project">Intelligent Robot with automated movement</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-desktop"></i>
+                            <span class="title">Multimedia Technology</span>
+                            <span class="project">Flight Simulator</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-network-wired"></i>
+                            <span class="title">Internet Applications</span>
+                            <span class="project">Web Application using (TCP, Sockets)</span>
+                            <span class="project">REST API</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-database"></i>
+                            <span class="title">Databases</span>
+                            <span class="project">Backend SQL server</span>
+                            <span class="project">Backend no-SQL server</span>
+                        </div>
+                        <div class="course">
+                            <i class="fas fa-server"></i>
+                            <span class="title">Parallel Processing Systems</span>
+                            <span class="project">Conway’s Game of Life - OpenMP</span>
+                            <span class="project">Floyd - Warshall Algorithm - Threading Building Blocks</span>
+                            <span class="project">Heat equation (Jacobi, Gauss - Seidel SOR, Red - Black SOR methods) -
+                                MPI</span>
+                            <span class="project">Dense Matrix - Vector Multiplication - CUDA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workshops Section -->
+        <section id="workshops" class="workshops split">
+            <div class="left">
+                <div class="wrapper">
+                    <div class="reference">
+                        <h2>WORKSHOPS</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="wrapper">
+
+                    <div class="date">2016</div>
+                    <div class="workshop">
+                        <h3>Google Hash Code Competition</h3>
+                    </div>
+
+                    <div class="date">2015</div>
+                    <div class="workshop">
+                        <h3>IEEEXtreme Programming Competition 9.0</h3>
+                    </div>
+
+                    <div class="date">2014</div>
+                    <div class="workshop">
+                        <h3>Android Workshop organized by Electrical Engineering Students European Association (EESTEC)
+                        </h3>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Interests Section -->
+        <section id="interests" class="split">
+            <div class="left">
+                <div class="wrapper">
+                    <div class="reference">
+                        <h2>INTERESTS</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="wrapper">
+                    <div class="interests">
+                        <div class="interest">
+                            <i class="fas fa-book-open"></i>
+                            <span class="title">Reading</span>
+                        </div>
+                        <div class="interest">
+                            <i class="fas fa-theater-masks"></i>
+                            <span class="title">Theater</span>
+                        </div>
+                        <div class="interest">
+                            <i class="fas fa-music"></i>
+                            <span class="title">Music</span>
+                        </div>
+                        <div class="interest">
+                            <i class="fas fa-basketball-ball"></i>
+                            <span class="title">Sports</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="footer" class="footer">
+            <div class="left">
+                <div class="wrapper">
+                    &copy; 2019
+                </div>
+            </div>
+            <div class="right">
+                <div class="wrapper">
+                    Created by <a href="">Giannis</a> & <a href="">Maria</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <script src="dist/assets/js/main.min.js"></script>
+
 </body>
-</html>
+
+</html
