@@ -215,7 +215,6 @@ section:nth-of-type(n+2) .left h2 {
       font-weight: bolder;
       letter-spacing: 4px; }
     #cover .right .surname {
-      font-weight: 0;
       letter-spacing: -1px; }
     #cover .right .subtitle {
       color: #cccccc;
