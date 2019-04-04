@@ -43,8 +43,9 @@ section:nth-of-type(n+2) .left h2{font-size:1.5rem;margin:15px 0 2px 0;color:#cc
 #projects i{font-size:1.3rem;width:40px;height:40px;position:absolute;top:20px;left:0;text-align:center}
 #projects span{display:block;margin-left:20px}#projects .title{font-size:1rem;margin-bottom:10px;color:white}
 #projects .title:hover{color:#7fcada;-webkit-transition-duration:.8s;transition-duration:.8s;cursor:pointer}
-#projects .project{font-size:.9rem;margin-bottom:5px;color:#ccc}#projects .project:last-child{margin-bottom:0}
-#workshops .date{color:#ccc;font-style:italic;margin-bottom:10px}#workshops h3{color:white;padding:0;margin:0;font-size:1rem;line-height:1rem;font-weight:500}
+#projects .project{font-size:.9rem;margin-bottom:5px;color:#ccc}#projects .project a{text-decoration:none;color:#ccc}
+#projects .project:last-child{margin-bottom:0}#workshops .date{color:#ccc;font-style:italic;margin-bottom:10px}
+#workshops h3{color:white;padding:0;margin:0;font-size:1rem;line-height:1rem;font-weight:500}
 #workshops .workshop:not(:last-child) h3{margin-bottom:30px}#interests .interests{display:grid;grid-template-columns:1fr 1fr}
 #interests .interest{padding:15px 0 10px 30px;position:relative}#interests i{color:#7fcada;font-size:1.3rem;width:40px;height:40px;position:absolute;top:16px;left:0;text-align:center}
 #interests .title{display:block;margin-left:10px;font-size:1.1rem;margin-bottom:10px;color:white;-webkit-transition-duration:.8s;transition-duration:.8s}

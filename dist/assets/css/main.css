@@ -383,6 +383,9 @@ section:nth-of-type(n+2) .left h2 {
   font-size: 0.9rem;
   margin-bottom: 5px;
   color: #cccccc; }
+  #projects .project a {
+    text-decoration: none;
+    color: #cccccc; }
 
 #projects .project:last-child {
   margin-bottom: 0; }
