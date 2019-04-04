@@ -1,6 +1,6 @@
 // Preloader
 function preloader() {
-    setTimeout(showPage, 1000);
+    setTimeout(showPage, 1500);
 };
 
 function showPage() {
