@@ -239,15 +239,15 @@ function bush(x, z) {
     b.position.set((rand() - 0.5) * 0.8, 0.35, (rand() - 0.5) * 0.8);
     g.add(b);
   }
-  place(g, x, z, 0.7, 0.8);
+  place(g, x, z, 0.7, 0.8, false); // bushes are soft: drive straight through
 }
 
-function place(g, x, z, r, h) {
+function place(g, x, z, r, h, solid = true) {
   g.position.set(x, groundHeight(x, z) - 0.05, z);
   g.rotation.y = rand() * Math.PI * 2;
   shadowAll(g);
   scene.add(g);
-  obstacles.push({ x, z, r, h: g.position.y + h });
+  if (solid) obstacles.push({ x, z, r, h: g.position.y + h });
 }
 
 // ---------- Landmarks ----------
@@ -269,7 +269,7 @@ function place(g, x, z, r, h) {
 
 // Lighthouse on the western shore
 const lighthouse = (() => {
-  const p = polar(Math.PI, R - 4);
+  const p = polar(Math.PI, R - 2.2); // on the beach, so there's no too-narrow gap behind it
   const g = new THREE.Group();
   const y0 = groundHeight(p.x, p.z);
   for (let i = 0; i < 5; i++) {
@@ -409,8 +409,8 @@ for (let i = 0; i < 12; i++) {
 }
 
 // Scatter trees, rocks, bushes, palms
-for (let i = 0; i < 40; i++) { const p = randomSpot(8, R - 7, 2); if (p) (rand() < 0.55 ? pine : roundTree)(p.x, p.z); }
-for (let i = 0; i < 16; i++) { const p = randomSpot(8, R - 6, 1.5); if (p) rock(p.x, p.z); }
+for (let i = 0; i < 26; i++) { const p = randomSpot(8, R - 7, 3.5); if (p) (rand() < 0.55 ? pine : roundTree)(p.x, p.z); }
+for (let i = 0; i < 9; i++) { const p = randomSpot(8, R - 6, 3.5); if (p) rock(p.x, p.z); }
 for (let i = 0; i < 22; i++) { const p = randomSpot(8, R - 6, 1); if (p) bush(p.x, p.z); }
 for (let i = 0; i < 12; i++) { const p = randomSpot(R - 4.5, R - 3, 2.5); if (p) palm(p.x, p.z); }
 
@@ -515,7 +515,7 @@ function makeLabel(text, color, scale = 1) {
   ctx.fillText(text, w / 2, 58);
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthWrite: false, transparent: true }));
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthWrite: false, transparent: true, fog: false }));
   sprite.scale.set((w / 110) * 1.1 * scale, 1.1 * scale, 1);
   return sprite;
 }
@@ -563,16 +563,14 @@ const stations = STATIONS.map((data, i) => {
   g.add(beam);
 
   const label = makeLabel(data.label, data.color);
-  label.position.y = 5.4;
+  label.position.y = 7;
+  label.renderOrder = 10;
   g.add(label);
 
   scene.add(g);
   return { data, group: g, icon, ring, beam, pos, visited: false, inside: false };
 });
 
-const title = makeLabel(cv.name.toUpperCase(), '#1d2433', 2.2);
-title.position.set(0, 8, 0);
-scene.add(title);
 
 // ---------- Skill gems ----------
 const skillNames = cv.skills.flatMap((g) => g.items);
@@ -747,7 +745,7 @@ chassis.add(headlight, headlight.target);
 rover.position.set(0, 0, 8);
 scene.add(rover);
 
-const state = { heading: 0, speed: 0, target: null, vy: 0, grounded: true, pitch: 0, roll: 0, squash: 1, respawn: -1 };
+const state = { slideDir: 0, contactTime: 0, heading: 0, speed: 0, target: null, vy: 0, grounded: true, pitch: 0, roll: 0, squash: 1, respawn: -1 };
 
 // Click / tap target marker
 const marker = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.8, 24), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.9, side: THREE.DoubleSide }));
@@ -1206,15 +1204,33 @@ function update(dt, t) {
   rover.position.z += fwd.z * state.speed * dt;
 
   // Static obstacles (you can jump over the short ones)
+  let touching = false;
   for (const o of obstacles) {
     if (rover.position.y > o.h) continue;
     const dx = rover.position.x - o.x, dz = rover.position.z - o.z;
     const d = Math.hypot(dx, dz), min = o.r + 1.1;
     if (d < min && d > 0) {
-      rover.position.x = o.x + (dx / d) * min;
-      rover.position.z = o.z + (dz / d) * min;
-      state.speed *= 0.6;
+      const nx = dx / d, nz = dz / d;
+      rover.position.x = o.x + nx * min;
+      rover.position.z = o.z + nz * min;
+      // Heading into it: lose a little speed and turn along its edge so you slide round it
+      const into = (fwd.x * nx + fwd.z * nz) * Math.sign(state.speed || 1);
+      if (into < 0) {
+        touching = true;
+        if (!state.slideDir) state.slideDir = (nx * Math.cos(state.heading) - nz * Math.sin(state.heading)) >= 0 ? 1 : -1;
+        state.heading += state.slideDir * Math.sign(state.speed || 1) * 3.5 * dt * -into;
+        state.speed *= 1 - 1.5 * dt;
+      }
     }
+  }
+
+  // Still pressed against something after a second? Try sliding round the other side.
+  if (touching) {
+    state.contactTime += dt;
+    if (state.contactTime > 1) { state.slideDir = -state.slideDir; state.contactTime = 0; }
+  } else {
+    state.contactTime = 0;
+    state.slideDir = 0;
   }
 
   // Keep to the island unless you drive off the pier
@@ -1345,11 +1361,6 @@ function update(dt, t) {
     });
     fireflies.pts.geometry.attributes.position.needsUpdate = true;
   }
-  title.position.y = 8 + Math.sin(t) * 0.3;
-  if (started && title.visible) {
-    title.material.opacity -= dt * 2;
-    if (title.material.opacity <= 0) title.visible = false;
-  }
 
   // Camera
   if (started) {
@@ -1383,7 +1394,7 @@ window.addEventListener('resize', () => {
 
 // Hook for automated checks
 window.__island = {
-  rover, stations, gems, props, pins, state, jump, toggleNight,
+  rover, stations, gems, props, pins, state, jump, toggleNight, solids: obstacles,
   get night() { return night; },
   step(frames = 1) { for (let i = 0; i < frames; i++) update(1 / 60, clock.elapsedTime + i / 60); },
 };
