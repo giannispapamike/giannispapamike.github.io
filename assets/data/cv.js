@@ -4,7 +4,7 @@
 // Dates are 'YYYY-MM'; `end: null` means the role is current.
 
 export const cv = {
-  name: 'Giannis Papamichail',
+  name: 'Ioannis Papamichail',
   fullName: 'Ioannis Papamichail',
   title: 'Senior Full-Stack Engineer',
   tagline: 'I build software that helps shipping companies keep their fleets safe.',
