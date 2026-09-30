@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ioannis Papamichail · Island</title>
+    <meta name="description" content="Drive around a little 3D island to explore Ioannis Papamichail's CV.">
+    <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap">
+    <style>
+        :root {
+            --ink: #1d2433;
+            --muted: #5b6477;
+            --card: rgba(255, 255, 255, 0.92);
+            --chip: #eef1f6;
+            --sky: #8fd0f7;
+            --intro: linear-gradient(180deg, rgba(159, 211, 245, .6), rgba(255, 214, 170, .75));
+            --accent: #ff7a59;
+            color-scheme: light;
+        }
+
+        :root[data-night] {
+            --ink: #e8eef8;
+            --muted: #a3b0c4;
+            --card: rgba(18, 26, 46, 0.88);
+            --chip: #26324d;
+            --sky: #0b1430;
+            --intro: linear-gradient(180deg, rgba(11, 20, 48, .55), rgba(40, 30, 80, .75));
+            color-scheme: dark;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+            background: var(--sky);
+            font-family: 'Poppins', system-ui, sans-serif;
+            color: var(--ink);
+        }
+
+        canvas { display: block; touch-action: none; }
+
+        button { font: inherit; color: inherit; }
+        :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+        /* HUD */
+        .hud {
+            position: fixed;
+            top: calc(16px + env(safe-area-inset-top, 0px));
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .hud > * { pointer-events: auto; }
+
+        .badge {
+            background: var(--card);
+            color: var(--ink);
+            border: 0;
+            border-radius: 14px;
+            padding: 10px 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .15);
+            font-size: 13px;
+            text-decoration: none;
+            backdrop-filter: blur(6px);
+        }
+
+        .badge strong { font-size: 15px; display: block; }
+        .hud-right { display: flex; gap: 8px; align-items: center; }
+
+        .theme-btn { cursor: pointer; width: 42px; height: 42px; padding: 0; display: grid; place-items: center; }
+        .theme-btn svg { width: 20px; height: 20px; }
+        .theme-btn .sun { display: none; }
+        :root[data-night] .theme-btn .sun { display: block; }
+        :root[data-night] .theme-btn .moon { display: none; }
+
+        .stations {
+            position: fixed;
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: max-content;
+            max-width: calc(100% - 32px);
+        }
+
+        .stations button {
+            font: 600 12px 'Poppins', system-ui, sans-serif;
+            border: 0;
+            border-radius: 999px;
+            padding: 8px 12px;
+            background: var(--card);
+            color: var(--ink);
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stations button .dot { width: 9px; height: 9px; border-radius: 50%; opacity: .35; }
+        .stations button.visited .dot { opacity: 1; }
+
+        .jump-btn {
+            display: none;
+            position: fixed;
+            right: 16px;
+            bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 0;
+            background: var(--card);
+            color: var(--ink);
+            font-weight: 800;
+            font-size: 13px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .2);
+            touch-action: none;
+        }
+
+        @media (pointer: coarse) { .jump-btn { display: block; } }
+
+        /* Info panel */
+        .panel {
+            position: fixed;
+            top: 50%;
+            right: 24px;
+            width: min(440px, calc(100% - 32px));
+            max-height: calc(100% - 170px);
+            overflow: auto;
+            transform: translate(120%, -50%);
+            transition: transform .45s cubic-bezier(.2, .9, .3, 1.2);
+            background: var(--card);
+            color: var(--ink);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+        }
+
+        .panel.open { transform: translate(0, -50%); }
+        .panel:not(.open) { pointer-events: none; }
+
+        .panel h2 {
+            margin: 0 0 12px;
+            font-size: 26px;
+            font-weight: 800;
+            border-bottom: 4px solid var(--c, var(--accent));
+            display: inline-block;
+        }
+
+        .panel .close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            border: 0;
+            background: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .panel p { line-height: 1.6; color: var(--muted); font-size: 14px; margin: 6px 0; }
+        .panel p.lead { color: var(--ink); font-size: 16px; font-weight: 600; }
+        .panel strong { color: var(--ink); }
+        .select { user-select: all; }
+
+        .tl-item { border-left: 3px solid var(--c); padding: 2px 0 2px 14px; margin: 16px 0; }
+        .tl-item .date { font-size: 12px; font-weight: 600; color: var(--c); }
+        .tl-item h3 { margin: 2px 0; font-size: 16px; }
+        .tl-item h4 { margin: 0 0 4px; font-weight: 400; color: var(--muted); font-size: 13px; }
+        .tl-item p { font-size: 13px; }
+        .tl-item ul { margin: 4px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+
+        .group h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; margin: 16px 0 8px; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--chip); }
+        .tag.got { background: var(--c); color: #fff; }
+
+        .proj { margin: 14px 0; }
+        .proj .org { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--c); }
+        .proj h3 { margin: 0; font-size: 15px; }
+        .proj p { margin: 2px 0 0; }
+
+        .contact a {
+            display: block;
+            padding: 10px 14px;
+            margin: 8px 0;
+            border-radius: 12px;
+            background: var(--chip);
+            color: var(--c);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 84px;
+            left: 50%;
+            transform: translate(-50%, -20px);
+            opacity: 0;
+            transition: all .3s;
+            background: var(--ink);
+            color: var(--card);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        :root[data-night] .toast { background: #fff4c2; color: #1d2433; }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        /* Intro */
+        .intro {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background: var(--intro);
+            transition: opacity .6s;
+            padding: 16px;
+        }
+
+        .intro.hidden { opacity: 0; pointer-events: none; }
+
+        .intro-card { text-align: center; max-width: 560px; }
+        .intro-card .hello { letter-spacing: .3em; font-size: 13px; color: var(--muted); }
+        .intro-card h1 { font-size: clamp(36px, 9vw, 64px); line-height: 1; margin: 8px 0; font-weight: 800; text-wrap: balance; }
+        .intro-card .role { font-size: 18px; color: var(--muted); margin-bottom: 24px; }
+        .intro-card .keys { font-size: 13px; color: var(--muted); margin-top: 18px; line-height: 2; }
+
+        kbd {
+            background: var(--card);
+            color: var(--ink);
+            border-radius: 6px;
+            padding: 1px 7px;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, .2);
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        .start {
+            font: 800 18px 'Poppins', system-ui, sans-serif;
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 36px;
+            background: var(--ink);
+            color: var(--sky);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+            transition: transform .15s;
+        }
+
+        .start:hover { transform: translateY(-2px) scale(1.03); }
+        .intro-card .classic { display: inline-block; margin-top: 14px; color: var(--muted); font-size: 13px; }
+
+        @media (max-width: 640px) {
+            .panel {
+                top: auto;
+                bottom: 110px;
+                right: 16px;
+                max-height: calc(100% - 200px);
+                transform: translateY(calc(100% + 130px));
+            }
+
+            .panel.open { transform: translateY(0); }
+            .hide-mobile { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .panel, .toast, .intro, .start { transition: none; }
+        }
+    </style>
+
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
+    </script>
+</head>
+
+<body>
+    <div class="hud">
+        <div class="badge">
+            <strong id="hud-name"></strong>
+            <span id="hud-progress">0 stations · 0 skills</span>
+        </div>
+        <div class="hud-right">
+            <button class="badge theme-btn" id="theme-btn" type="button" aria-label="Switch to night">
+                <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+                <svg class="sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+            </button>
+            <a class="badge hide-mobile" id="hud-cv" download>Download CV</a>
+            <a class="badge" href="../">Classic view</a>
+        </div>
+    </div>
+
+    <nav class="stations" id="stations" aria-label="Drive to section"></nav>
+    <button class="jump-btn" id="jump-btn" type="button">JUMP</button>
+
+    <aside class="panel" id="panel" aria-live="polite">
+        <button class="close" id="panel-close" aria-label="Close">×</button>
+        <div id="panel-body"></div>
+    </aside>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="intro" id="intro">
+        <div class="intro-card">
+            <div class="hello">HELLO, I AM</div>
+            <h1 id="intro-name"></h1>
+            <div class="role" id="intro-role"></div>
+            <button class="start" id="start">Explore my island →</button>
+            <div class="keys">
+                <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrows to drive · <kbd>Space</kbd> to jump · <kbd>N</kbd> day/night<br>
+                Tap or click the ground to drive there · crash into crates, balls and bowling pins<br>
+                Visit the six stations and collect every skill gem
+            </div>
+            <a class="classic" href="../">Prefer a plain page? Classic view</a>
+        </div>
+    </div>
+
+    <script type="module" src="game.js"></script>
+</body>
+
+</html>
