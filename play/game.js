@@ -584,13 +584,18 @@ const gems = skillNames.map((name, i) => {
   mesh.position.set(p.x, baseY, p.z);
   mesh.castShadow = true;
   scene.add(mesh);
-  if (high) { // a faint pillar hints that this one needs a jump
-    const hint = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2.4), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.35 }));
-    hint.position.set(p.x, baseY - 1.6, p.z);
+  if (high) { // a pulsing jump pad on the ground marks where to jump
+    const hint = new THREE.Mesh(
+      new THREE.RingGeometry(0.8, 1.15, 28),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false }),
+    );
+    hint.rotation.x = -Math.PI / 2;
+    hint.position.set(p.x, baseY - 3.1 + 0.06, p.z);
     scene.add(hint);
     mesh.userData.hint = hint;
+    mesh.scale.setScalar(1.3);
   }
-  return { name, mesh, baseY, collected: false, t: 0, phase: rand() * 6 };
+  return { name, mesh, baseY, high, hinted: false, collected: false, t: 0, phase: rand() * 6 };
 });
 
 // ---------- Pushable props ----------
@@ -1325,6 +1330,16 @@ function update(dt, t) {
     g.mesh.rotation.y += dt * 2;
     g.mesh.position.y = g.baseY + Math.sin(t * 2 + g.phase) * 0.25;
     const horiz = Math.hypot(rover.position.x - g.mesh.position.x, rover.position.z - g.mesh.position.z);
+    const hint = g.mesh.userData.hint;
+    if (hint) {
+      const pulse = (t * 1.5 + g.phase) % 1;
+      hint.scale.setScalar(0.7 + pulse * 0.6);
+      hint.material.opacity = 0.7 * (1 - pulse);
+      if (!g.hinted && horiz < 4) {
+        g.hinted = true;
+        toast(matchMedia('(pointer: coarse)').matches ? 'This gem is up high: tap JUMP under it' : 'This gem is up high: press Space under it to jump');
+      }
+    }
     if (horiz < 1.8 && Math.abs(rover.position.y + 1 - g.mesh.position.y) < 1.4) {
       g.collected = true;
       if (g.mesh.userData.hint) g.mesh.userData.hint.visible = false;
